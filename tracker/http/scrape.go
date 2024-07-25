@@ -8,7 +8,7 @@ import (
 	"github.com/crimist/trakx/tracker/storage"
 )
 
-func (t *HTTPTracker) scrape(conn net.Conn, infohashes params) {
+func (t *Tracker) scrape(conn net.Conn, infohashes params) {
 	stats.Scrapes.Add(1)
 
 	dictionary := pools.Dictionaries.Get()

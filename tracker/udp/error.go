@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// TODO: rename this to `fatal`
 func (tracker *Tracker) sendError(remote *net.UDPAddr, message string, TransactionID int32) {
 	if tracker.stats != nil {
 		tracker.stats.ServerErrors.Add(1)

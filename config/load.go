@@ -21,6 +21,7 @@ const (
 	TrackerModeInfo     = "info"     // http information server, no tracker
 	TrackerModeDisabled = "disabled" // http disabled
 
+	// TODO: respect XDG_CONFIG_HOME
 	defaultConfigPath = "~/.config/trakx.yaml"
 
 	// folderPerm holds the default permission mask for folders

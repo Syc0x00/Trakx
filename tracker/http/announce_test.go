@@ -39,7 +39,7 @@ func TestAnnounce(t *testing.T) {
 	}
 
 	// setup tracker
-	tracker := HTTPTracker{}
+	tracker := Tracker{}
 	tracker.peerdb = db
 
 	// setup pipe

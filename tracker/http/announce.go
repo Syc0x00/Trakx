@@ -23,7 +23,7 @@ type announceParams struct {
 	numwant  string
 }
 
-func (t *HTTPTracker) announce(conn net.Conn, vals *announceParams, ip netip.Addr) {
+func (t *Tracker) announce(conn net.Conn, vals *announceParams, ip netip.Addr) {
 	stats.Announces.Add(1)
 
 	// get vars

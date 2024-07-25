@@ -22,7 +22,7 @@ import (
 // Run initializes and runs the tracker with the requested configuration settings.
 func Run(conf *config.Configuration) {
 	var udptracker *udp.Tracker
-	var httptracker http.HTTPTracker
+	var httptracker http.Tracker
 	var err error
 
 	zap.L().Info("Loaded configuration, starting trakx...")
@@ -44,6 +44,7 @@ func Run(conf *config.Configuration) {
 
 	pools.Initialize(int(conf.Numwant.Limit))
 
+	// TODO: put trackers in a slice of type `Tracker` (iface) and then pass it down to the signal handler which can then call Shutdown() on all of them
 	go signalHandler(peerdb, udptracker, &httptracker)
 
 	if conf.Debug.Pprof != 0 {
@@ -106,8 +107,6 @@ func Run(conf *config.Configuration) {
 			}
 		}()
 	}
-
-	// TODO: put trackers in a slice of type `Tracker` (iface) and then pass it down to the signal handler which can then call Shutdown() on all of them
 
 	// UDP tracker
 	if conf.UDP.Enabled {

@@ -51,9 +51,11 @@ type AnnounceResponse struct {
 	Action        Action
 	TransactionID int32
 	Interval      int32
-	Leechers      int32
-	Seeders       int32
-	Peers         []byte
+	// TODO: rename to `Leeches`
+	Leechers int32
+	// TODO: rename to `Seeds`
+	Seeders int32
+	Peers   []byte
 }
 
 // Marshall encodes an AnnounceResp to a byte slice.

@@ -25,6 +25,9 @@ const (
 	// min request size (a connect request)
 	minimumRequestSize  = 16
 	minimumAnnounceSize = 98
+
+	fatalUnregisteredConnection = "unregistered connection id"
+	fatalInvalidAction          = "invalid action"
 )
 
 var (
@@ -146,7 +149,7 @@ func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
 	addrPort := netip.AddrPortFrom(addr, uint16(udpAddr.Port))
 
 	if action.IsInvalid() {
-		tracker.sendError(udpAddr, "invalid action", transactionID)
+		tracker.sendError(udpAddr, fatalInvalidAction, transactionID)
 		zap.L().Debug("client set invalid action", zap.Binary("packet", data), zap.Uint8("action", data[11]), zap.Any("remote", addrPort))
 		return
 	}
@@ -163,12 +166,12 @@ func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
 	connectionID := int64(binary.BigEndian.Uint64(data[0:8]))
 	if tracker.config.Validate {
 		if validConnectionID := tracker.connCache.Validate(connectionID, addrPort); !validConnectionID {
-			tracker.sendError(udpAddr, "unregistered connection id", transactionID)
+			tracker.sendError(udpAddr, fatalUnregisteredConnection, transactionID)
 			zap.L().Debug("client sent unregistered connection id", zap.Binary("packet", data), zap.Int64("connectionID", connectionID), zap.Any("remote", addrPort))
 			return
 		}
 	} else {
-		zap.L().Debug("insecure beaviour - skipping connection id validation")
+		zap.L().Debug("insecure beaviour - skipping udp connection id validation")
 	}
 
 	switch action {

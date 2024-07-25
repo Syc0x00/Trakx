@@ -11,6 +11,10 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	fatalInvalidPort = "invalid announce port"
+)
+
 func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, transactionID int32, data []byte) {
 	if tracker.stats != nil {
 		tracker.stats.Announces.Add(1)
@@ -30,7 +34,7 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 	}
 
 	if announceRequest.Port == 0 {
-		tracker.sendError(udpAddr, "invalid announce port", announceRequest.TransactionID)
+		tracker.sendError(udpAddr, fatalInvalidPort, announceRequest.TransactionID)
 		zap.L().Debug("client sent announce with invalid port", zap.Any("announce", announceRequest), zap.Uint16("port", announceRequest.Port), zap.Any("remote", udpAddr))
 		return
 	}

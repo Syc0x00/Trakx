@@ -1,26 +1,13 @@
 package udp
 
 import (
+	"net"
 	"testing"
 
 	"github.com/crimist/trakx/tracker/udp/udpprotocol"
-	"github.com/davecgh/go-spew/spew"
 )
 
-func TestConnect(t *testing.T) {
-	var transaction int32 = 1
-
-	conn, err := dialTestTracker()
-	if err != nil {
-		t.Fatal("Error connecting to test UDP tracker", err.Error())
-	}
-	defer conn.Close()
-
-	connectReq := udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
-		Action:        udpprotocol.ActionConnect,
-		TransactionID: transaction,
-	}
+func connect(t *testing.T, conn *net.UDPConn, connectReq udpprotocol.ConnectRequest) *udpprotocol.ConnectResponse {
 	data, err := connectReq.Marshall()
 	if err != nil {
 		t.Fatal("Error marshalling connect request:", err.Error())
@@ -37,12 +24,26 @@ func TestConnect(t *testing.T) {
 		t.Fatal("Error unmarshalling connect response:", err.Error())
 	}
 
+	return connectResp
+}
+
+func TestConnectSuccess(t *testing.T) {
+	conn := dialMockTracker(t, testNetworkAddress4)
+	connectReq := udpprotocol.ConnectRequest{
+		ProtcolID:     udpprotocol.ProtocolMagic,
+		Action:        udpprotocol.ActionConnect,
+		TransactionID: 1,
+	}
+	connectResp := connect(t, conn, connectReq)
+
 	if connectResp.Action != udpprotocol.ActionConnect {
 		t.Errorf("Expected action = %v; got %v", udpprotocol.ActionConnect, connectResp.Action)
 	}
-	if connectResp.TransactionID != transaction {
-		t.Errorf("Expected transaction ID = %v; got %v", transaction, connectResp.TransactionID)
+	if connectResp.TransactionID != connectReq.TransactionID {
+		t.Errorf("Expected transaction ID = %v; got %v", connectReq.TransactionID, connectResp.TransactionID)
 	}
+}
 
-	spew.Dump(connectResp)
+func TestConnectBadAction(t *testing.T) {
+	// TODO: does this test need to be written? Is it a generic bad action test?
 }

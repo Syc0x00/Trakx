@@ -13,20 +13,20 @@ const (
 	httpRequestMax = 2600 // enough for scrapes up to 40 info_hashes
 )
 
-type HTTPTracker struct {
+type Tracker struct {
 	peerdb   storage.Database
 	workers  workers
 	shutdown chan struct{}
 }
 
 // Init sets up the HTTPTracker.
-func (t *HTTPTracker) Init(peerdb storage.Database) {
-	t.peerdb = peerdb
-	t.shutdown = make(chan struct{})
+func (tracker *Tracker) Init(peerdb storage.Database) {
+	tracker.peerdb = peerdb
+	tracker.shutdown = make(chan struct{})
 }
 
 // Serve begins listening and serving clients.
-func (t *HTTPTracker) Serve() error {
+func (tracker *Tracker) Serve() error {
 	ln, err := net.Listen("tcp", fmt.Sprintf("%v:%v", config.Config.HTTP.IP, config.Config.HTTP.Port))
 	if err != nil {
 		return errors.Wrap(err, "Failed to open TCP listen socket")
@@ -37,15 +37,15 @@ func (t *HTTPTracker) Serve() error {
 		return errors.Wrap(err, "failed to generate embedded cache")
 	}
 
-	t.workers = workers{
-		tracker:   t,
+	tracker.workers = workers{
+		tracker:   tracker,
 		listener:  ln,
 		fileCache: cache,
 	}
 
-	t.workers.startWorkers(config.Config.HTTP.Threads)
+	tracker.workers.startWorkers(config.Config.HTTP.Threads)
 
-	<-t.shutdown
+	<-tracker.shutdown
 	if err := ln.Close(); err != nil {
 		return errors.Wrap(err, "Failed to close tcp listen socket")
 	}
@@ -54,7 +54,7 @@ func (t *HTTPTracker) Serve() error {
 }
 
 // Shutdown stops the HTTP tracker server by closing the socket.
-func (t *HTTPTracker) Shutdown() {
+func (t *Tracker) Shutdown() {
 	if t == nil || t.shutdown == nil {
 		return
 	}

@@ -101,10 +101,9 @@ func TestMain(m *testing.M) {
 		},
 	}
 
-	// run tracker
 	fmt.Println("Starting mock tracker...")
 	go Run(conf)
-	time.Sleep(100 * time.Millisecond) // wait for run to complete
+	time.Sleep(100 * time.Millisecond)
 	fmt.Println("started!")
 
 	m.Run()

@@ -16,6 +16,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TODO: look into how caddy controller is handled
+
 const (
 	logFilePermissions = 0644
 )

@@ -15,7 +15,7 @@ import (
 )
 
 type workers struct {
-	tracker   *HTTPTracker
+	tracker   *Tracker
 	listener  net.Listener
 	fileCache config.EmbeddedCache
 }
