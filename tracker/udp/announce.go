@@ -1,4 +1,4 @@
-package udptracker
+package udp
 
 import (
 	"math/rand"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/crimist/trakx/pools"
 	"github.com/crimist/trakx/storage"
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"go.uber.org/zap"
 )
 

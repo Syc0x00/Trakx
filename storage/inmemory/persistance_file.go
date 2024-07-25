@@ -36,7 +36,7 @@ func (fp *FilePersistance) read(db *InMemory, filepath string) error {
 		return errors.Wrap(err, "failed to read file from disk")
 	}
 
-	db.torrents = make(map[storage.Hash]*Torrent, 1) // TODO: do some math to estimate the size of the map
+	db.torrents = make(map[storage.Hash]*Torrent, 1) // TODO: run some calculations to estimate the size of the map
 	peers, torrents, err := decodeBinary(db, data)
 	if err != nil {
 		return errors.Wrap(err, "failed to binary decode database")

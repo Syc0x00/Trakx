@@ -1,9 +1,9 @@
-package udptracker
+package udp
 
 import (
 	"net"
 
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"go.uber.org/zap"
 )
 

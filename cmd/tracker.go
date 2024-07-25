@@ -3,7 +3,6 @@ package tracker
 import (
 	"expvar"
 	"fmt"
-	"math/rand"
 	gohttp "net/http"
 	"time"
 
@@ -20,30 +19,22 @@ import (
 	_ "github.com/crimist/trakx/storage/inmemory"
 )
 
-func checkMisconfiguration(conf *config.Configuration) {
-	const misconfigurationHeader = "POTENTIAL CONFIGURATION ERROR: "
-
-	if !conf.UDP.ConnDB.Validate {
-		zap.L().Warn(misconfigurationHeader + "UDP connection validation is DISABLED. Do NOT expose this service to untrusted networks - it could be abused for UDP amplication DoS.")
-	}
-	if conf.DB.Expiry < conf.Announce.Base+conf.Announce.Fuzz {
-		zap.L().Warn(misconfigurationHeader + "peer expiry time < announce interval - peers will expire from database before being updated.")
-	}
-}
-
 // Run initializes and runs the tracker with the requested configuration settings.
 func Run(conf *config.Configuration) {
 	var udptracker *udp.Tracker
 	var httptracker http.HTTPTracker
 	var err error
 
-	rand.Seed(time.Now().UnixNano() * time.Now().Unix())
-
 	zap.L().Info("Loaded configuration, starting trakx...")
 
-	checkMisconfiguration(conf)
+	warnings := conf.Validate()
+	if warnings&config.WarningUDPValidation != 0 {
+		zap.L().Warn("Configuration warning [UDP.ConnDB.Validate]: UDP connection validation is disabled. Do not expose this service to untrusted networks; it could be abused in UDP based amplification attacks.")
+	}
+	if warnings&config.WarningPeerExpiry != 0 {
+		zap.L().Warn("Configuration warning [conf.Announce]: Peer expiry time < announce interval. Peers will expire from the database between announces")
+	}
 
-	// db
 	peerdb, err := storage.Open()
 	if err != nil {
 		zap.L().Fatal("Failed to initialize storage", zap.Error(err))
@@ -55,7 +46,6 @@ func Run(conf *config.Configuration) {
 
 	go signalHandler(peerdb, udptracker, &httptracker)
 
-	// run pprof server
 	if conf.Debug.Pprof != 0 {
 		go servePprof(conf.Debug.Pprof)
 	}

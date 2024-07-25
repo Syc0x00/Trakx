@@ -6,6 +6,7 @@ go 1.20
 
 require (
 	github.com/cbeuw/connutil v0.0.0-20200411215123-966bfaa51ee3
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-torrent/bencode v0.0.0-20150403200907-4318e12a955c
 	github.com/heroku/x v0.0.55
 	github.com/kkyr/fig v0.3.0
@@ -15,7 +16,6 @@ require (
 )
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	go.uber.org/atomic v1.10.0 // indirect

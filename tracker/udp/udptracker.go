@@ -2,8 +2,7 @@
 	Contains UDP tracker for trakx.
 */
 
-// TODO: rename this to `udp`
-package udptracker
+package udp
 
 import (
 	"encoding/binary"
@@ -13,8 +12,8 @@ import (
 	"github.com/crimist/trakx/pools"
 	"github.com/crimist/trakx/stats"
 	"github.com/crimist/trakx/storage"
-	"github.com/crimist/trakx/tracker/udptracker/conncache"
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/conncache"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )

@@ -1,9 +1,9 @@
-package udptracker
+package udp
 
 import (
 	"testing"
 
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"github.com/davecgh/go-spew/spew"
 )
 

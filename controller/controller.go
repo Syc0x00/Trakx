@@ -12,7 +12,7 @@ import (
 
 	tracker "github.com/crimist/trakx/cmd"
 	"github.com/crimist/trakx/config"
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"github.com/pkg/errors"
 )
 

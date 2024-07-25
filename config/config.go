@@ -56,6 +56,28 @@ type Configuration struct {
 	}
 }
 
+type Warnings int
+
+const (
+	WarningNone          Warnings = iota
+	WarningUDPValidation Warnings = 1 << iota
+	WarningPeerExpiry    Warnings = 1 << iota
+)
+
+// Validate ensures that configuration values are sane and returns warnings for potential misconfigurations or security issues
+func (conf *Configuration) Validate() Warnings {
+	warnings := WarningNone
+
+	if !conf.UDP.ConnDB.Validate {
+		warnings |= WarningUDPValidation
+	}
+	if conf.DB.Expiry < conf.Announce.Base+conf.Announce.Fuzz {
+		warnings |= WarningPeerExpiry
+	}
+
+	return warnings
+}
+
 // LogPath returns the log path as defined by the configuration and current time
 func (conf *Configuration) LogPath() string {
 	return filepath.Join(conf.CachePath, "trakx_"+time.Now().Format("06-01-02-15-04-05")+".log")

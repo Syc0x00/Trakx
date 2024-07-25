@@ -1,11 +1,11 @@
-package udptracker
+package udp
 
 import (
 	"math/rand"
 	"net"
 	"net/netip"
 
-	"github.com/crimist/trakx/tracker/udptracker/udpprotocol"
+	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"go.uber.org/zap"
 )
 

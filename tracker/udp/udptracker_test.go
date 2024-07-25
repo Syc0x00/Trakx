@@ -1,4 +1,4 @@
-package udptracker
+package udp
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/crimist/trakx/storage/inmemory"
-	"github.com/crimist/trakx/tracker/udptracker/conncache"
+	"github.com/crimist/trakx/tracker/udp/conncache"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
