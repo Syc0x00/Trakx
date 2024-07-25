@@ -4,12 +4,13 @@
 
 ## Current
 
-Get udp tracker working
+Refactoring UDP conn cache
 
 ## Future
 
-* Refactor HTTP tracker & test
-* Get everything working
+* Refactor UDP protocol package (probably just needs updated tests)
+* Refactor HTTP tracker
+* Refactor HTTP tracker tests
 * Refactor controller / command line interface
   * Inspo from Caddy - pass config / pidfile in args, have defaults respecting xdg, detect systemd
 * TODOs and perf optimizations

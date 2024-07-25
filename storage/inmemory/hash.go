@@ -51,7 +51,7 @@ func (db *InMemory) TorrentPeers(hash storage.Hash, numWant uint, includePeerID 
 	torrent.mutex.RLock()
 	for id, peer := range torrent.Peers {
 		if includePeerID {
-			dictionary.String("peer id", utils.ByteToStringUnsafe(id[:]))
+			dictionary.String("peer id", utils.BytesToStringUnsafe(id[:]))
 		}
 		dictionary.String("ip", peer.IP.String())
 		dictionary.Int64("port", int64(peer.Port))
