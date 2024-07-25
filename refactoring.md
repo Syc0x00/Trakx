@@ -1,10 +1,10 @@
 ## Current
 
-Finish refactoring the UDP tracker test. Grep for `TODO(latest):`
+Refactoring UDP conn cache
 
 ## Future
 
-* Refactor UDP sub packages
+* Refactor UDP protocol package (probably just needs updated tests)
 * Refactor HTTP tracker
 * Refactor HTTP tracker tests
 * Refactor controller / command line interface

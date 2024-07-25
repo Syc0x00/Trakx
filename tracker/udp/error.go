@@ -7,16 +7,16 @@ import (
 	"go.uber.org/zap"
 )
 
-// TODO: rename this to `fatal`
-func (tracker *Tracker) sendError(remote *net.UDPAddr, message string, TransactionID int32) {
+func (tracker *Tracker) fatal(remote *net.UDPAddr, message []byte, TransactionID int32) {
 	if tracker.stats != nil {
+		// TODO: this isn't right
 		tracker.stats.ServerErrors.Add(1)
 	}
 
 	protoError := udpprotocol.ErrorResponse{
 		Action:        udpprotocol.ActionError,
 		TransactionID: TransactionID,
-		ErrorString:   []byte("internal error"),
+		ErrorString:   message,
 	}
 
 	data, err := protoError.Marshall()

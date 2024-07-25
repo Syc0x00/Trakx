@@ -51,11 +51,9 @@ type AnnounceResponse struct {
 	Action        Action
 	TransactionID int32
 	Interval      int32
-	// TODO: rename to `Leeches`
-	Leechers int32
-	// TODO: rename to `Seeds`
-	Seeders int32
-	Peers   []byte
+	Leeches       int32
+	Seeds         int32
+	Peers         []byte
 }
 
 // Marshall encodes an AnnounceResp to a byte slice.
@@ -71,10 +69,10 @@ func (ar *AnnounceResponse) Marshall() ([]byte, error) {
 	if err := binary.Write(&buff, binary.BigEndian, ar.Interval); err != nil {
 		return nil, errors.Wrap(err, "failed to encode announce response iterval")
 	}
-	if err := binary.Write(&buff, binary.BigEndian, ar.Leechers); err != nil {
+	if err := binary.Write(&buff, binary.BigEndian, ar.Leeches); err != nil {
 		return nil, errors.Wrap(err, "failed to encode announce response leeches")
 	}
-	if err := binary.Write(&buff, binary.BigEndian, ar.Seeders); err != nil {
+	if err := binary.Write(&buff, binary.BigEndian, ar.Seeds); err != nil {
 		return nil, errors.Wrap(err, "failed to encode announce response seeders")
 	}
 	if err := binary.Write(&buff, binary.BigEndian, ar.Peers); err != nil {
@@ -99,10 +97,10 @@ func NewAnnounceResponse(data []byte) (*AnnounceResponse, error) {
 	if err := binary.Read(reader, binary.BigEndian, &announceResp.Interval); err != nil {
 		return nil, errors.Wrap(err, "failed to decode announce response iterval")
 	}
-	if err := binary.Read(reader, binary.BigEndian, &announceResp.Leechers); err != nil {
+	if err := binary.Read(reader, binary.BigEndian, &announceResp.Leeches); err != nil {
 		return nil, errors.Wrap(err, "failed to decode announce response leeches")
 	}
-	if err := binary.Read(reader, binary.BigEndian, &announceResp.Seeders); err != nil {
+	if err := binary.Read(reader, binary.BigEndian, &announceResp.Seeds); err != nil {
 		return nil, errors.Wrap(err, "failed to decode announce response seeders")
 	}
 	if err := binary.Read(reader, binary.BigEndian, &announceResp.Peers); err != nil {

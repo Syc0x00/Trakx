@@ -5,7 +5,6 @@ import (
 	"net/netip"
 
 	"github.com/crimist/trakx/tracker/udp/udpprotocol"
-	"github.com/crimist/trakx/utils"
 	"go.uber.org/zap"
 )
 
@@ -18,14 +17,14 @@ func (tracker *Tracker) scrape(udpAddr *net.UDPAddr, addrPort netip.AddrPort, tr
 
 	scrape, err := udpprotocol.NewScrapeRequest(data)
 	if err != nil {
-		tracker.sendError(udpAddr, "failed to parse scrape", transactionID)
+		tracker.fatal(udpAddr, []byte("failed to parse scrape"), transactionID)
 		zap.L().Info("failed to parse clients scrape packet", zap.Binary("packet", data), zap.Error(err), zap.Any("remote", addrPort))
 		return
 	}
 
 	if len(scrape.InfoHashes) > maximumScrapeHashes {
-		tracker.sendError(udpAddr, "packet contains more than 74 hashes", scrape.TransactionID)
-		zap.L().Debug("client sent scrape with more than 74 hashes", zap.Int("hashes", len(scrape.InfoHashes)), zap.Any("scrape", scrape), zap.Any("remote", udpAddr))
+		tracker.fatal(udpAddr, []byte("exceeded 74 hashes"), scrape.TransactionID)
+		zap.L().Debug("client sent over sized scrape request (> 74 hashes)", zap.Int("hashes", len(scrape.InfoHashes)), zap.Any("scrape", scrape), zap.Any("remote", udpAddr))
 		return
 	}
 
@@ -36,7 +35,7 @@ func (tracker *Tracker) scrape(udpAddr *net.UDPAddr, addrPort netip.AddrPort, tr
 
 	for _, hash := range scrape.InfoHashes {
 		if len(hash) != 20 {
-			tracker.sendError(udpAddr, "hash "+utils.ByteToStringUnsafe(hash[0:7])+" is missized", scrape.TransactionID)
+			tracker.fatal(udpAddr, append([]byte("missized hash "), hash[0:7]...), scrape.TransactionID)
 			zap.L().Debug("client sent scrape with missized hash", zap.Any("hash", hash), zap.Any("scrape", scrape), zap.Any("remote", udpAddr))
 			return
 		}
@@ -52,7 +51,7 @@ func (tracker *Tracker) scrape(udpAddr *net.UDPAddr, addrPort netip.AddrPort, tr
 
 	marshalledResp, err := resp.Marshall()
 	if err != nil {
-		tracker.sendError(udpAddr, "failed to marshall scrape response", scrape.TransactionID)
+		tracker.fatal(udpAddr, []byte("failed to marshall scrape response"), scrape.TransactionID)
 		zap.L().Error("failed to marshall scrape response", zap.Error(err), zap.Any("scrape", scrape), zap.Any("remote", udpAddr))
 		return
 	}

@@ -20,19 +20,18 @@ import (
 
 const (
 	errSocketClosed = "use of closed network connection"
-	// maximum request size (a scrape request with 20/20 hashes)
-	maximumRequestSize = 1496
-	// min request size (a connect request)
+	// maximum request size, derived from the size of a scrape with 74 hashes
+	maximumRequestSize = 16 + 20*74
+	// minimum request size, derived from the size of a connect request
 	minimumRequestSize  = 16
 	minimumAnnounceSize = 98
-
-	fatalUnregisteredConnection = "unregistered connection id"
-	fatalInvalidAction          = "invalid action"
 )
 
 var (
-	// need to keep it short to prevent udp amplification
-	requestTooSmall = []byte("nope")
+	// fatalMinReqLen needs to be short to prevent UDP amplication abuse
+	fatalMinReqLen              = []byte("nope")
+	fatalInvalidAction          = []byte("invalid action")
+	fatalUnregisteredConnection = []byte("unregistered connection id")
 )
 
 type TrackerConfig struct {
@@ -83,6 +82,7 @@ func (tracker *Tracker) Serve(ip net.IP, port int, routines int) error {
 	})
 
 	// TODO: figure out what optimal number of goroutines is (benchmark)
+	// Going to need to write a tool that can simulate a large number of clients
 	for i := 0; i < routines; i++ {
 		go func() {
 			for {
@@ -99,8 +99,8 @@ func (tracker *Tracker) Serve(ip net.IP, port int, routines int) error {
 				}
 
 				if size < minimumRequestSize {
-					zap.L().Warn("UDP packet below minimum request size", zap.String("addr", remoteAddr.String()), zap.Int("size", size), zap.ByteString("data", (data)[:size]))
-					tracker.socket.WriteToUDP(requestTooSmall, remoteAddr)
+					tracker.socket.WriteToUDP(fatalMinReqLen, remoteAddr)
+					zap.L().Debug("client sent packet below minimum request size", zap.String("addr", remoteAddr.String()), zap.Int("size", size), zap.ByteString("data", (data)[:size]))
 				} else {
 					tracker.process((data)[:size], remoteAddr)
 				}
@@ -141,15 +141,15 @@ func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
 
 	addr, ok := netip.AddrFromSlice(udpAddr.IP)
 	if !ok {
-		tracker.sendError(udpAddr, "failed to parse ip", transactionID)
+		tracker.fatal(udpAddr, []byte("failed to parse ip"), transactionID)
 		zap.L().DPanic("failed to parse remote ip slice as netip", zap.ByteString("ip", udpAddr.IP))
 		return
 	}
 	addr = addr.Unmap() // use ipv4 instead of ipv6 mapped ipv4
 	addrPort := netip.AddrPortFrom(addr, uint16(udpAddr.Port))
 
-	if action.IsInvalid() {
-		tracker.sendError(udpAddr, fatalInvalidAction, transactionID)
+	if !action.Valid() {
+		tracker.fatal(udpAddr, fatalInvalidAction, transactionID)
 		zap.L().Debug("client set invalid action", zap.Binary("packet", data), zap.Uint8("action", data[11]), zap.Any("remote", addrPort))
 		return
 	}
@@ -166,12 +166,12 @@ func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
 	connectionID := int64(binary.BigEndian.Uint64(data[0:8]))
 	if tracker.config.Validate {
 		if validConnectionID := tracker.connCache.Validate(connectionID, addrPort); !validConnectionID {
-			tracker.sendError(udpAddr, fatalUnregisteredConnection, transactionID)
+			tracker.fatal(udpAddr, fatalUnregisteredConnection, transactionID)
 			zap.L().Debug("client sent unregistered connection id", zap.Binary("packet", data), zap.Int64("connectionID", connectionID), zap.Any("remote", addrPort))
 			return
 		}
 	} else {
-		zap.L().Debug("insecure beaviour - skipping udp connection id validation")
+		zap.L().Debug("Skipping UDP connection id validation")
 	}
 
 	switch action {

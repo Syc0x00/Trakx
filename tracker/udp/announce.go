@@ -11,8 +11,8 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	fatalInvalidPort = "invalid announce port"
+var (
+	fatalInvalidPort = []byte("invalid announce port")
 )
 
 func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, transactionID int32, data []byte) {
@@ -21,20 +21,20 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 	}
 
 	if len(data) < minimumAnnounceSize {
-		tracker.sendError(udpAddr, "announce too short", transactionID)
+		tracker.fatal(udpAddr, []byte("announce too short"), transactionID)
 		zap.L().Debug("client sent announce below minimum size", zap.Binary("packet", data), zap.Int("size", len(data)), zap.Any("remote", addrPort))
 		return
 	}
 
 	announceRequest, err := udpprotocol.NewAnnounceRequest(data)
 	if err != nil {
-		tracker.sendError(udpAddr, "failed to parse announce", transactionID)
+		tracker.fatal(udpAddr, []byte("failed to parse announce"), transactionID)
 		zap.L().Debug("failed to parse clients announce packet", zap.Binary("packet", data), zap.Error(err), zap.Any("remote", addrPort))
 		return
 	}
 
 	if announceRequest.Port == 0 {
-		tracker.sendError(udpAddr, fatalInvalidPort, announceRequest.TransactionID)
+		tracker.fatal(udpAddr, fatalInvalidPort, announceRequest.TransactionID)
 		zap.L().Debug("client sent announce with invalid port", zap.Any("announce", announceRequest), zap.Uint16("port", announceRequest.Port), zap.Any("remote", udpAddr))
 		return
 	}
@@ -59,13 +59,13 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 			Action:        udpprotocol.ActionAnnounce,
 			TransactionID: announceRequest.TransactionID,
 			Interval:      interval,
-			Leechers:      int32(leeches),
-			Seeders:       int32(seeds),
+			Leeches:       int32(leeches),
+			Seeds:         int32(seeds),
 			Peers:         []byte{},
 		}
 		respBytes, err := marshalledResp.Marshall()
 		if err != nil {
-			tracker.sendError(udpAddr, "failed to marshall announce response", announceRequest.TransactionID)
+			tracker.fatal(udpAddr, []byte("failed to marshall announce response"), announceRequest.TransactionID)
 			zap.L().Error("failed to marshall announce response", zap.Error(err), zap.Any("announce", announceRequest), zap.Any("remote", udpAddr))
 			return
 		}
@@ -94,8 +94,8 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 		Action:        udpprotocol.ActionAnnounce,
 		TransactionID: announceRequest.TransactionID,
 		Interval:      interval,
-		Leechers:      int32(leeches),
-		Seeders:       int32(seeds),
+		Leeches:       int32(leeches),
+		Seeds:         int32(seeds),
 	}
 
 	if ipversion == storage.IPv4 {
@@ -112,7 +112,7 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 	}
 
 	if err != nil {
-		tracker.sendError(udpAddr, "failed to marshall announce response", announceRequest.TransactionID)
+		tracker.fatal(udpAddr, []byte("failed to marshall announce response"), announceRequest.TransactionID)
 		zap.L().Error("failed to marshall announce response", zap.Error(err), zap.Any("announce", announceRequest), zap.Any("remote", udpAddr))
 		return
 	}

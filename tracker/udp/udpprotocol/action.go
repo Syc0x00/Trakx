@@ -2,8 +2,8 @@ package udpprotocol
 
 type Action int32
 
-func (action Action) IsInvalid() bool {
-	return action < 0 || action > 4
+func (action Action) Valid() bool {
+	return action >= 0 && action <= 4
 }
 
 const (

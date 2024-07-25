@@ -28,7 +28,7 @@ func connect(t *testing.T, conn *net.UDPConn, connectReq udpprotocol.ConnectRequ
 }
 
 func TestConnectSuccess(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectReq := udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -42,8 +42,4 @@ func TestConnectSuccess(t *testing.T) {
 	if connectResp.TransactionID != connectReq.TransactionID {
 		t.Errorf("Expected transaction ID = %v; got %v", connectReq.TransactionID, connectResp.TransactionID)
 	}
-}
-
-func TestConnectBadAction(t *testing.T) {
-	// TODO: does this test need to be written? Is it a generic bad action test?
 }

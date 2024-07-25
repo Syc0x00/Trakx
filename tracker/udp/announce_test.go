@@ -60,7 +60,7 @@ func announceError(t *testing.T, conn *net.UDPConn, announceReq udpprotocol.Anno
 }
 
 func TestAnnounceStarted(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -83,11 +83,11 @@ func TestAnnounceStarted(t *testing.T) {
 		Port:          0xAABB,
 	})
 
-	if announceResp.Leechers != 1 {
-		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leechers)
+	if announceResp.Leeches != 1 {
+		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leeches)
 	}
-	if announceResp.Seeders != 0 {
-		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeders)
+	if announceResp.Seeds != 0 {
+		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeds)
 	}
 	if len(announceResp.Peers) != 1 {
 		t.Errorf("Expected len(peers) = %v; got %v", 1, len(announceResp.Peers))
@@ -101,7 +101,7 @@ func TestAnnounceStarted(t *testing.T) {
 }
 
 func TestAnnounceStarted6(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -124,11 +124,11 @@ func TestAnnounceStarted6(t *testing.T) {
 		Port:          0xAABB,
 	})
 
-	if announceResp.Leechers != 1 {
-		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leechers)
+	if announceResp.Leeches != 1 {
+		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leeches)
 	}
-	if announceResp.Seeders != 0 {
-		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeders)
+	if announceResp.Seeds != 0 {
+		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeds)
 	}
 	if len(announceResp.Peers) != 1 {
 		t.Errorf("Expected len(peers) = %v; got %v", 1, len(announceResp.Peers))
@@ -143,7 +143,7 @@ func TestAnnounceStarted6(t *testing.T) {
 
 // Test an announce with event = completed
 func TestAnnounceCompleteEvent(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -166,11 +166,11 @@ func TestAnnounceCompleteEvent(t *testing.T) {
 		Port:          0xAABB,
 	})
 
-	if announceResp.Leechers != 1 {
-		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leechers)
+	if announceResp.Leeches != 1 {
+		t.Errorf("Expected leeches = %v; got %v", 1, announceResp.Leeches)
 	}
-	if announceResp.Seeders != 1 {
-		t.Errorf("Expected seeds = %v; got %v", 1, announceResp.Seeders)
+	if announceResp.Seeds != 1 {
+		t.Errorf("Expected seeds = %v; got %v", 1, announceResp.Seeds)
 	}
 	if len(announceResp.Peers) != 1 {
 		t.Errorf("Expected len(peers) = %v; got %v", 1, len(announceResp.Peers))
@@ -185,7 +185,7 @@ func TestAnnounceCompleteEvent(t *testing.T) {
 
 // Test an announce where left = 0
 func TestAnnounceCompleteLeft(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -208,11 +208,11 @@ func TestAnnounceCompleteLeft(t *testing.T) {
 		Port:          0xAABB,
 	})
 
-	if announceResp.Leechers != 0 {
-		t.Errorf("Expected leeches = %v; got %v", 0, announceResp.Leechers)
+	if announceResp.Leeches != 0 {
+		t.Errorf("Expected leeches = %v; got %v", 0, announceResp.Leeches)
 	}
-	if announceResp.Seeders != 1 {
-		t.Errorf("Expected seeds = %v; got %v", 1, announceResp.Seeders)
+	if announceResp.Seeds != 1 {
+		t.Errorf("Expected seeds = %v; got %v", 1, announceResp.Seeds)
 	}
 	if len(announceResp.Peers) != 1 {
 		t.Errorf("Expected len(peers) = %v; got %v", 1, len(announceResp.Peers))
@@ -226,7 +226,7 @@ func TestAnnounceCompleteLeft(t *testing.T) {
 }
 
 func TestAnnounceStopped(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -249,11 +249,11 @@ func TestAnnounceStopped(t *testing.T) {
 		Port:          0xAABB,
 	})
 
-	if announceResp.Leechers != 0 {
-		t.Errorf("Expected leeches = %v; got %v", 0, announceResp.Leechers)
+	if announceResp.Leeches != 0 {
+		t.Errorf("Expected leeches = %v; got %v", 0, announceResp.Leeches)
 	}
-	if announceResp.Seeders != 0 {
-		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeders)
+	if announceResp.Seeds != 0 {
+		t.Errorf("Expected seeds = %v; got %v", 0, announceResp.Seeds)
 	}
 	if len(announceResp.Peers) != 0 {
 		t.Errorf("Expected len(peers) = %v; got %v", 0, len(announceResp.Peers))
@@ -261,7 +261,7 @@ func TestAnnounceStopped(t *testing.T) {
 }
 
 func TestAnnounceInvalidPort(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -288,5 +288,3 @@ func TestAnnounceInvalidPort(t *testing.T) {
 		t.Errorf("Expected error = %v; got %v", fatalInvalidPort, errorResp.ErrorString)
 	}
 }
-
-// TODO(latest): write tests for the rest of the fatal client errors

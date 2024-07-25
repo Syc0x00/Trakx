@@ -17,9 +17,9 @@ import (
 )
 
 const (
-	testNetworkAddress4 = "127.0.0.1"
-	testNetworkAddress6 = "::1"
-	testStartupDelay    = 10 * time.Millisecond
+	testNetAddress4      = "127.0.0.1"
+	testNetAddress6      = "::1"
+	testMockStartupDelay = 10 * time.Millisecond
 )
 
 var (
@@ -61,7 +61,7 @@ func TestMain(m *testing.M) {
 
 	peerDB, err := inmemory.NewInMemory(inmemory.Config{})
 	if err != nil {
-		zap.L().Fatal("UDP trakcer received shutdown")
+		zap.L().Fatal("UDP tracker received shutdown")
 	}
 	connCache := conncache.NewConnectionCache(1, 1*time.Minute, 1*time.Minute, "")
 	tracker := NewTracker(peerDB, connCache, nil, testTrackerConfig)
@@ -72,7 +72,7 @@ func TestMain(m *testing.M) {
 		}
 	}()
 
-	time.Sleep(testStartupDelay)
+	time.Sleep(testMockStartupDelay)
 	m.Run()
 
 	tracker.Shutdown()
@@ -91,7 +91,7 @@ func dialMockTracker(t *testing.T, address string) *net.UDPConn {
 }
 
 func TestUnregisteredConnection(t *testing.T) {
-	conn := dialMockTracker(t, testNetworkAddress4)
+	conn := dialMockTracker(t, testNetAddress4)
 	connect(t, conn, udpprotocol.ConnectRequest{
 		ProtcolID:     udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
@@ -116,5 +116,34 @@ func TestUnregisteredConnection(t *testing.T) {
 
 	if !bytes.Equal(errorResp.ErrorString, []byte(fatalUnregisteredConnection)) {
 		t.Errorf("Expected error = %v; got %v", fatalUnregisteredConnection, errorResp.ErrorString)
+	}
+}
+
+func TestBadAction(t *testing.T) {
+	conn := dialMockTracker(t, testNetAddress4)
+	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
+		ProtcolID:     udpprotocol.ProtocolMagic,
+		Action:        udpprotocol.ActionConnect,
+		TransactionID: 1,
+	})
+
+	errorResp := announceError(t, conn, udpprotocol.AnnounceRequest{
+		ConnectionID:  connectResp.ConnectionID,
+		Action:        5,
+		TransactionID: 1,
+		InfoHash:      storage.Hash{},
+		PeerID:        storage.PeerID{},
+		Downloaded:    1000,
+		Left:          1000,
+		Uploaded:      1000,
+		Event:         udpprotocol.EventStarted,
+		IP:            0,
+		Key:           0x1337,
+		NumWant:       50,
+		Port:          4096,
+	})
+
+	if !bytes.Equal(errorResp.ErrorString, []byte(fatalInvalidAction)) {
+		t.Errorf("Expected error = %v; got %v", fatalInvalidAction, errorResp.ErrorString)
 	}
 }
