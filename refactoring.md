@@ -1,3 +1,7 @@
+##
+
+* We're moving connection backups into the main package using Marshall / Unmarshall
+
 ## Current
 
 Refactoring UDP conn cache
