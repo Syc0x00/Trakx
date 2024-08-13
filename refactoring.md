@@ -1,15 +1,14 @@
-##
+## Notes
 
 * We're moving connection backups into the main package using Marshall / Unmarshall
 
 ## Current
 
-Refactoring UDP conn cache
+Refactor HTTP tracker & test
 
 ## Future
 
-* Refactor UDP protocol package (probably just needs updated tests)
-* Refactor HTTP tracker
-* Refactor HTTP tracker tests
+* Get things working
 * Refactor controller / command line interface
+  * Inspo from Caddy - pass config / pidfile in args, have defaults respecting xdg, detect systemd
 * TODOs and perf optimizations
