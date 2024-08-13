@@ -12,7 +12,7 @@ import (
 	"github.com/crimist/trakx/pools"
 	"github.com/crimist/trakx/stats"
 	"github.com/crimist/trakx/storage"
-	"github.com/crimist/trakx/tracker/udp/conncache"
+	"github.com/crimist/trakx/tracker/udp/connections"
 	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -43,21 +43,21 @@ type TrackerConfig struct {
 }
 
 type Tracker struct {
-	config    TrackerConfig
-	socket    *net.UDPConn
-	connCache *conncache.ConnectionCache
-	peerDB    storage.Database
-	shutdown  chan struct{}
-	stats     *stats.Statistics
+	config      TrackerConfig
+	socket      *net.UDPConn
+	connections *connections.Connections
+	peerDB      storage.Database
+	shutdown    chan struct{}
+	stats       *stats.Statistics
 }
 
-func NewTracker(peerDB storage.Database, connCache *conncache.ConnectionCache, stats *stats.Statistics, config TrackerConfig) *Tracker {
+func NewTracker(peerDB storage.Database, connections *connections.Connections, stats *stats.Statistics, config TrackerConfig) *Tracker {
 	tracker := Tracker{
-		config:    config,
-		peerDB:    peerDB,
-		connCache: connCache,
-		shutdown:  make(chan struct{}),
-		stats:     stats,
+		config:      config,
+		peerDB:      peerDB,
+		connections: connections,
+		shutdown:    make(chan struct{}),
+		stats:       stats,
 	}
 
 	return &tracker
@@ -124,11 +124,6 @@ func (tracker *Tracker) Serve(ip net.IP, port int, routines int) error {
 func (tracker *Tracker) Shutdown() {
 	var signal struct{}
 	tracker.shutdown <- signal
-}
-
-// ConnectionCount returns the number of BitTorrent UDP protocol connections in the connection database.
-func (tracker *Tracker) ConnectionCount() int {
-	return tracker.connCache.EntryCount()
 }
 
 func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
