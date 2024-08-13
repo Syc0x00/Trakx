@@ -10,7 +10,7 @@ import (
 
 	"github.com/crimist/trakx/storage"
 	"github.com/crimist/trakx/storage/inmemory"
-	"github.com/crimist/trakx/tracker/udp/conncache"
+	"github.com/crimist/trakx/tracker/udp/connections"
 	"github.com/crimist/trakx/tracker/udp/udpprotocol"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -63,8 +63,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		zap.L().Fatal("UDP tracker received shutdown")
 	}
-	connCache := conncache.NewConnectionCache(1, 1*time.Minute, 1*time.Minute, "")
-	tracker := NewTracker(peerDB, connCache, nil, testTrackerConfig)
+	connections := connections.NewConnections(1, 1*time.Minute, 1*time.Minute)
+	tracker := NewTracker(peerDB, connections, nil, testTrackerConfig)
 	go func() {
 		tracker.Serve(nil, testNetworkPort, 1)
 		if err != nil {

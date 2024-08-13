@@ -1,7 +1,6 @@
 package udp
 
 import (
-	"math/rand"
 	"net"
 	"net/netip"
 
@@ -21,8 +20,7 @@ func (tracker *Tracker) connect(udpAddr *net.UDPAddr, addrPort netip.AddrPort, t
 		return
 	}
 
-	connectionID := rand.Int63()
-	tracker.connCache.Set(connectionID, addrPort)
+	connectionID := tracker.connections.Create(addrPort)
 
 	resp := udpprotocol.ConnectResponse{
 		Action:        udpprotocol.ActionConnect,

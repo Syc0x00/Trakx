@@ -160,7 +160,7 @@ func (tracker *Tracker) process(data []byte, udpAddr *net.UDPAddr) {
 
 	connectionID := int64(binary.BigEndian.Uint64(data[0:8]))
 	if tracker.config.Validate {
-		if validConnectionID := tracker.connCache.Validate(connectionID, addrPort); !validConnectionID {
+		if validConnectionID := tracker.connections.Validate(addrPort, connectionID); !validConnectionID {
 			tracker.fatal(udpAddr, fatalUnregisteredConnection, transactionID)
 			zap.L().Debug("client sent unregistered connection id", zap.Binary("packet", data), zap.Int64("connectionID", connectionID), zap.Any("remote", addrPort))
 			return
