@@ -10,12 +10,12 @@ import (
 	"go.uber.org/zap"
 )
 
-type assocationEntry struct {
+type associationEntry struct {
 	ID        int64
 	TimeStamp int64
 }
 
-type associations map[netip.AddrPort]assocationEntry
+type associations map[netip.AddrPort]associationEntry
 
 type Connections struct {
 	mutex        sync.RWMutex
@@ -46,7 +46,7 @@ func (connCache *Connections) Create(addr netip.AddrPort) (connectionID int64) {
 	epoch := time.Now().Unix()
 
 	connCache.mutex.Lock()
-	connCache.associations[addr] = assocationEntry{
+	connCache.associations[addr] = associationEntry{
 		ID:        connectionID,
 		TimeStamp: epoch,
 	}
@@ -60,7 +60,8 @@ func (connCache *Connections) Validate(addr netip.AddrPort, id int64) bool {
 	entry, ok := connCache.associations[addr]
 	connCache.mutex.RUnlock()
 
-	// it's possible for an expired entry to be valid which is acceptable
+	// it's possible for an expired entry to be validated here if it has yet to be collected
+	// but this should be acceptable so long as the gc frequency is reasonable
 	return ok && entry.ID == id
 }
 
@@ -80,5 +81,5 @@ func (connections *Connections) garbageCollector() {
 	}
 	connections.mutex.Unlock()
 
-	zap.L().Info("connections garbage collection complete", zap.Int("evicted", evicted), zap.Int("post-entries", connections.Entries()), zap.Duration("elasped", time.Since(start)))
+	zap.L().Info("connections garbage collection complete", zap.Int("evicted", evicted), zap.Int("post-entries", connections.Entries()), zap.Duration("elapsed", time.Since(start)))
 }

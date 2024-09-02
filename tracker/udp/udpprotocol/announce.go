@@ -67,7 +67,7 @@ func (ar *AnnounceResponse) Marshall() ([]byte, error) {
 		return nil, errors.Wrap(err, "failed to encode announce response transaction id")
 	}
 	if err := binary.Write(&buff, binary.BigEndian, ar.Interval); err != nil {
-		return nil, errors.Wrap(err, "failed to encode announce response iterval")
+		return nil, errors.Wrap(err, "failed to encode announce response interval")
 	}
 	if err := binary.Write(&buff, binary.BigEndian, ar.Leeches); err != nil {
 		return nil, errors.Wrap(err, "failed to encode announce response leeches")
@@ -95,7 +95,7 @@ func NewAnnounceResponse(data []byte) (*AnnounceResponse, error) {
 		return nil, errors.Wrap(err, "failed to decode announce response transaction id")
 	}
 	if err := binary.Read(reader, binary.BigEndian, &announceResp.Interval); err != nil {
-		return nil, errors.Wrap(err, "failed to decode announce response iterval")
+		return nil, errors.Wrap(err, "failed to decode announce response interval")
 	}
 	if err := binary.Read(reader, binary.BigEndian, &announceResp.Leeches); err != nil {
 		return nil, errors.Wrap(err, "failed to decode announce response leeches")

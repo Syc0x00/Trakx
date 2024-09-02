@@ -62,7 +62,7 @@ func announceError(t *testing.T, conn *net.UDPConn, announceReq udpprotocol.Anno
 func TestAnnounceStarted(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -103,7 +103,7 @@ func TestAnnounceStarted(t *testing.T) {
 func TestAnnounceStarted6(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -145,7 +145,7 @@ func TestAnnounceStarted6(t *testing.T) {
 func TestAnnounceCompleteEvent(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -187,7 +187,7 @@ func TestAnnounceCompleteEvent(t *testing.T) {
 func TestAnnounceCompleteLeft(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -228,7 +228,7 @@ func TestAnnounceCompleteLeft(t *testing.T) {
 func TestAnnounceStopped(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -263,7 +263,7 @@ func TestAnnounceStopped(t *testing.T) {
 func TestAnnounceInvalidPort(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})

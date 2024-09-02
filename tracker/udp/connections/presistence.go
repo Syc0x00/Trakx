@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (connections *Connections) Marshall() ([]byte, error) {
+func (connections *Connections) Marshal() ([]byte, error) {
 	var buffer bytes.Buffer
 	writer := bufio.NewWriter(&buffer)
 
@@ -23,7 +23,7 @@ func (connections *Connections) Marshall() ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-func (connections *Connections) Unmarshall(data []byte) error {
+func (connections *Connections) Unmarshal(data []byte) error {
 	reader := bufio.NewReader(bytes.NewBuffer(data))
 	return gob.NewDecoder(reader).Decode(&connections.associations)
 }

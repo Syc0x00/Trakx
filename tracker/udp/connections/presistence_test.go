@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestMarshallUnmarshall(t *testing.T) {
+func TestMarshalUnmarshal(t *testing.T) {
 	connections := NewConnections(1, testTimeNever, testTimeNever)
 	ipv4 := netip.MustParseAddrPort("1.1.1.1:1234")
 	ipv6 := netip.MustParseAddrPort("[::1]:1234")
@@ -13,14 +13,14 @@ func TestMarshallUnmarshall(t *testing.T) {
 	id4 := connections.Create(ipv4)
 	id6 := connections.Create(ipv6)
 
-	data, err := connections.Marshall()
+	data, err := connections.Marshal()
 	if err != nil {
 		t.Fatal("failed to marshall connections", err)
 	}
 
-	err = connections.Unmarshall(data)
+	err = connections.Unmarshal(data)
 	if err != nil {
-		t.Fatal("failed to unmarshall connections", err)
+		t.Fatal("failed to unmarshal connections", err)
 	}
 
 	if connections.associations[ipv4].ID != id4 {

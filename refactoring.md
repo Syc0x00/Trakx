@@ -1,16 +1,17 @@
 ## Notes
 
-* We're moving connection backups into the main package using Marshall / Unmarshall
+* We're moving connection backups into the main package using Marshal / Unmarshal
 
 ## Current
 
-Refactoring UDP conn cache
+Refactor UDP protocol
+* Needs tests
 
 ## Future
 
-* Refactor UDP protocol package (probably just needs updated tests)
 * Refactor HTTP tracker
 * Refactor HTTP tracker tests
 * Refactor controller / command line interface
   * Inspo from Caddy - pass config / pidfile in args, have defaults respecting xdg, detect systemd
 * TODOs and perf optimizations
+* Typos (Marshall -> Marshal)

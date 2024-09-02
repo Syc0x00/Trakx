@@ -93,7 +93,7 @@ func dialMockTracker(t *testing.T, address string) *net.UDPConn {
 func TestUnregisteredConnection(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})
@@ -122,7 +122,7 @@ func TestUnregisteredConnection(t *testing.T) {
 func TestBadAction(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectResp := connect(t, conn, udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	})

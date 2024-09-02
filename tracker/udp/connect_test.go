@@ -30,7 +30,7 @@ func connect(t *testing.T, conn *net.UDPConn, connectReq udpprotocol.ConnectRequ
 func TestConnectSuccess(t *testing.T) {
 	conn := dialMockTracker(t, testNetAddress4)
 	connectReq := udpprotocol.ConnectRequest{
-		ProtcolID:     udpprotocol.ProtocolMagic,
+		ProtocolID:    udpprotocol.ProtocolMagic,
 		Action:        udpprotocol.ActionConnect,
 		TransactionID: 1,
 	}

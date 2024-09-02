@@ -13,7 +13,7 @@ const (
 
 // UDP tracker connect request
 type ConnectRequest struct {
-	ProtcolID     int64
+	ProtocolID    int64
 	Action        Action
 	TransactionID int32
 }
