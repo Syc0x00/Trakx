@@ -52,17 +52,18 @@ type ScrapeResponse struct {
 	Info          []ScrapeResponseInfo
 }
 
-// Marshall encodes a ScrapeResp to a byte slice.
-func (sr *ScrapeResponse) Marshall() ([]byte, error) {
-	buff := bytes.NewBuffer(make([]byte, 8+len(sr.Info)*12))
+// Marshal encodes a ScrapeResp to a byte slice.
+func (sr *ScrapeResponse) Marshal() ([]byte, error) {
+	var buff bytes.Buffer
+	buff.Grow(8 + len(sr.Info)*12)
 
-	if err := binary.Write(buff, binary.BigEndian, sr.Action); err != nil {
+	if err := binary.Write(&buff, binary.BigEndian, sr.Action); err != nil {
 		return nil, errors.Wrap(err, "failed to encode scrape response action")
 	}
-	if err := binary.Write(buff, binary.BigEndian, sr.TransactionID); err != nil {
+	if err := binary.Write(&buff, binary.BigEndian, sr.TransactionID); err != nil {
 		return nil, errors.Wrap(err, "failed to encode scrape response transaction id")
 	}
-	if err := binary.Write(buff, binary.BigEndian, sr.Info); err != nil {
+	if err := binary.Write(&buff, binary.BigEndian, sr.Info); err != nil {
 		return nil, errors.Wrap(err, "failed to encode scrape response info")
 	}
 

@@ -28,7 +28,7 @@ func (tracker *Tracker) connect(udpAddr *net.UDPAddr, addrPort netip.AddrPort, t
 		ConnectionID:  connectionID,
 	}
 
-	marshalledResp, err := resp.Marshall()
+	marshalledResp, err := resp.Marshal()
 	if err != nil {
 		tracker.fatal(udpAddr, []byte("failed to marshall connect response"), connectRequest.TransactionID)
 		zap.L().Error("failed to marshall connect response", zap.Error(err), zap.Any("connect", connectRequest), zap.Any("remote", udpAddr))

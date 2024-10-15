@@ -10,7 +10,7 @@ import (
 )
 
 func announceSuccess(t *testing.T, conn *net.UDPConn, announceReq udpprotocol.AnnounceRequest) udpprotocol.AnnounceResponse {
-	data, err := announceReq.Marshall()
+	data, err := announceReq.Marshal()
 	if err != nil {
 		t.Fatal("Error marshalling connect request:", err.Error())
 	}
@@ -40,7 +40,7 @@ func announceSuccess(t *testing.T, conn *net.UDPConn, announceReq udpprotocol.An
 }
 
 func announceError(t *testing.T, conn *net.UDPConn, announceReq udpprotocol.AnnounceRequest) udpprotocol.ErrorResponse {
-	data, err := announceReq.Marshall()
+	data, err := announceReq.Marshal()
 	if err != nil {
 		t.Fatal("Error marshalling connect request:", err.Error())
 	}

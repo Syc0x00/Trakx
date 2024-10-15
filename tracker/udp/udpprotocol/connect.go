@@ -18,8 +18,8 @@ type ConnectRequest struct {
 	TransactionID int32
 }
 
-// Marshall encodes a ConnectRequest to a byte slice.
-func (c *ConnectRequest) Marshall() ([]byte, error) {
+// Marshal encodes a ConnectRequest to a byte slice.
+func (c *ConnectRequest) Marshal() ([]byte, error) {
 	var buff bytes.Buffer
 	buff.Grow(16)
 	if err := binary.Write(&buff, binary.BigEndian, c); err != nil {
@@ -45,8 +45,8 @@ type ConnectResponse struct {
 	ConnectionID  int64
 }
 
-// Marshall encodes a ConnectResponse to a byte slice.
-func (cr *ConnectResponse) Marshall() ([]byte, error) {
+// Marshal encodes a ConnectResponse to a byte slice.
+func (cr *ConnectResponse) Marshal() ([]byte, error) {
 	var buff bytes.Buffer
 	buff.Grow(16)
 	if err := binary.Write(&buff, binary.BigEndian, cr); err != nil {

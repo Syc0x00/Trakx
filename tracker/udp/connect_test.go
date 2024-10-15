@@ -8,7 +8,7 @@ import (
 )
 
 func connect(t *testing.T, conn *net.UDPConn, connectReq udpprotocol.ConnectRequest) *udpprotocol.ConnectResponse {
-	data, err := connectReq.Marshall()
+	data, err := connectReq.Marshal()
 	if err != nil {
 		t.Fatal("Error marshalling connect request:", err.Error())
 	}

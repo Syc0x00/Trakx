@@ -14,8 +14,8 @@ type ErrorResponse struct {
 	ErrorString   []uint8
 }
 
-// Marshall encodes an ErrorResponse to a byte slice.
-func (errResp *ErrorResponse) Marshall() ([]byte, error) {
+// Marshal encodes an ErrorResponse to a byte slice.
+func (errResp *ErrorResponse) Marshal() ([]byte, error) {
 	var buff bytes.Buffer
 	buff.Grow(8 + len(errResp.ErrorString))
 

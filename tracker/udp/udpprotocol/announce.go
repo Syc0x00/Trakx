@@ -23,11 +23,10 @@ type AnnounceRequest struct {
 	Key           uint32
 	NumWant       int32
 	Port          uint16
-	// Extensions    uint16
 }
 
-// Marshall encodes an AnnounceRequest to a byte slice.
-func (a *AnnounceRequest) Marshall() ([]byte, error) {
+// Marshal encodes an AnnounceRequest to a byte slice.
+func (a *AnnounceRequest) Marshal() ([]byte, error) {
 	var buff bytes.Buffer
 	buff.Grow(98)
 	if err := binary.Write(&buff, binary.BigEndian, a); err != nil {
@@ -56,8 +55,8 @@ type AnnounceResponse struct {
 	Peers         []byte
 }
 
-// Marshall encodes an AnnounceResp to a byte slice.
-func (ar *AnnounceResponse) Marshall() ([]byte, error) {
+// Marshal encodes an AnnounceResp to a byte slice.
+func (ar *AnnounceResponse) Marshal() ([]byte, error) {
 	var buff bytes.Buffer
 
 	if err := binary.Write(&buff, binary.BigEndian, ar.Action); err != nil {

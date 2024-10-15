@@ -49,7 +49,7 @@ func (tracker *Tracker) scrape(udpAddr *net.UDPAddr, addrPort netip.AddrPort, tr
 		resp.Info = append(resp.Info, info)
 	}
 
-	marshalledResp, err := resp.Marshall()
+	marshalledResp, err := resp.Marshal()
 	if err != nil {
 		tracker.fatal(udpAddr, []byte("failed to marshall scrape response"), scrape.TransactionID)
 		zap.L().Error("failed to marshall scrape response", zap.Error(err), zap.Any("scrape", scrape), zap.Any("remote", udpAddr))

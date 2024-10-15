@@ -19,7 +19,7 @@ func (tracker *Tracker) fatal(remote *net.UDPAddr, message []byte, TransactionID
 		ErrorString:   message,
 	}
 
-	data, err := protoError.Marshall()
+	data, err := protoError.Marshal()
 	if err != nil {
 		zap.L().Error("failed to marshal error packet", zap.Error(err))
 		tracker.socket.WriteToUDP([]byte("catastrophic failure"), remote)

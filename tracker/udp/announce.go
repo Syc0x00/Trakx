@@ -63,7 +63,7 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 			Seeds:         int32(seeds),
 			Peers:         []byte{},
 		}
-		respBytes, err := marshalledResp.Marshall()
+		respBytes, err := marshalledResp.Marshal()
 		if err != nil {
 			tracker.fatal(udpAddr, []byte("failed to marshall announce response"), announceRequest.TransactionID)
 			zap.L().Error("failed to marshall announce response", zap.Error(err), zap.Any("announce", announceRequest), zap.Any("remote", udpAddr))
@@ -104,7 +104,7 @@ func (tracker *Tracker) announce(udpAddr *net.UDPAddr, addrPort netip.AddrPort, 
 		marshalledResp.Peers = peers6
 	}
 
-	respBytes, err := marshalledResp.Marshall()
+	respBytes, err := marshalledResp.Marshal()
 	if peers4 != nil {
 		pools.Peerlists4.Put(peers4)
 	} else {
