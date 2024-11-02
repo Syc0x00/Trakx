@@ -25,7 +25,7 @@ func BenchmarkAnnounce(b *testing.B) {
 	conn := connutil.Discard()
 
 	// config
-	tracker := HTTPTracker{}
+	tracker := Tracker{}
 	config.Config.DB.Type = "gomap"
 	config.Config.DB.Backup.Type = "none"
 	config.Config.Announce.Fuzz = 1 * time.Second
@@ -74,7 +74,7 @@ func BenchmarkAnnounceCompact(b *testing.B) {
 	conn := connutil.Discard()
 
 	// config
-	tracker := HTTPTracker{}
+	tracker := Tracker{}
 	config.Config.DB.Type = "gomap"
 	config.Config.DB.Backup.Type = "none"
 	config.Config.Announce.Fuzz = 1 * time.Second
@@ -123,7 +123,7 @@ func BenchmarkAnnounceCompactParallel(b *testing.B) {
 	conn := connutil.Discard()
 
 	// config
-	tracker := HTTPTracker{}
+	tracker := Tracker{}
 	config.Config.DB.Type = "gomap"
 	config.Config.DB.Backup.Type = "none"
 	config.Config.Announce.Fuzz = 1 * time.Second
