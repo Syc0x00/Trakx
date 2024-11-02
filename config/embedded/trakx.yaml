@@ -11,7 +11,6 @@ loglevel: "info"
 # how often to update expvar vals, 0 to disable
 expvarinterval: 1s
 
-# TODO: respect XDG_CACHE env type beat
 # cachepath is the directory in which trakx will write it's pid, logs, and database
 cachepath: ~/.cache/trakx/
 
